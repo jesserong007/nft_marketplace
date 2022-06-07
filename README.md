@@ -1,0 +1,2 @@
+# nft_marketplace
+NFT Marketplace是一个NFT交易的DAPP。用户可将自己的NFT发布在平台上并可出售给别人，也可使用以太币来购买别人发布的NFT。
