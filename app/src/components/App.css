@@ -1,0 +1,164 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.footer {
+  width: 100%;
+  height: 50px;
+  border-top: 1px solid #ddd;
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.footer .item {
+  float: left;
+  width: 33.33%;
+  height: 100%;
+  padding-top: 3px;
+}
+
+.footer .item .img {
+  width: 30px;
+  display: block;
+  margin: 0 auto;
+}
+
+.footer .item p {
+  text-align: center;
+  margin-top: -5px !important;
+  font-size: 14px;
+  color: #333;
+}
+
+.footer .item .link , .itemList .item .link {
+  padding: 0 !important;
+}
+
+.itemList .item .link {
+  text-align: left;
+  color: #333;
+  font-size: 14px;
+}
+
+.App {
+  padding-bottom: 50px;
+}
+
+.itemList {
+  width: 100%;
+  display: table;
+  border-bottom: 1px solid #ddd;
+}
+
+.itemList .item {
+  width: 100%;
+  height: 45px;
+  border-top: 1px solid #ddd;
+  line-height: 45px;
+  padding-left: 13px;
+  color: #333;
+  font-size: 14px;
+}
+
+.container-fluid {
+  padding: 36px;
+}
+
+.container .colItem {
+  width: 50%;
+  padding: 5px;
+}
+
+.rowContain {
+  padding: 5px;
+}
+
+.btn-buy {
+  font-size: 1.04rem !important;
+  padding: 0.3rem 0.3rem !important;
+}
+
+.card-body {
+  padding: 0.5rem 0.5rem;
+}
+
+.myhead {
+  width: 100%;
+  height: 180px;
+  padding:45px;
+}
+
+.myhead .touxiang {
+  width: 66px;
+  display: block;
+  margin: 0 auto;
+  opacity: 0.6;
+}
+
+.myhead .txt {
+  text-align: center;
+  margin-top:5px;
+  color: #333;
+  font-size: 14px; 
+}
+
+.navbar-toggler {
+  display: none;
+}
+
+.headerNavbar .navbar {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  opacity: 0.8;
+}
+
+.headerNavbar .navbar-brand {
+  font-size: 1.1rem !important;
+}
+
+.headerNavbar .navbar-brand img {
+  float: left;
+}
+
+.headerNavbar .navbar-brand .appName {
+  float: left;
+  line-height: 40px;
+  margin-left: 13px;
+}
