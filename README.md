@@ -42,3 +42,5 @@ NFT Marketplace是一个NFT交易的DAPP。用户可将自己的NFT发布在平�
 	
 	cd app & npm run start
 
+
+PS: 本项目代码仅供学习交流，不得用于商业用途
