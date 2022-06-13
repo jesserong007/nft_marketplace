@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import { Row, Form, Button } from 'react-bootstrap';
 import { create as ipfsHttpClient } from 'ipfs-http-client';
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
-import { NFTStorage } from 'nft.storage';
+import { NFTStorage } from 'nft.storage/dist/bundle.esm.min.js';
 import config from '../config.js';
 
 class Create extends Component {
@@ -20,7 +20,7 @@ class Create extends Component {
       name:'',
       description:'',
       client:null,
-      uploadMethod:3  //1为IPFS，2为Web3Storage
+      uploadMethod:2  //1为IPFS, 2为Web3Storage, 3为NFTStorage
     }
   }
 
@@ -40,7 +40,7 @@ class Create extends Component {
           return console.error('A token is needed. You can create one on https://web3.storage');
         }
 
-        client = new Web3Storage({ web3_storage_token });
+        client = new Web3Storage({ token:web3_storage_token });
       break;
       case 3:
         const nft_storage_token = config.nft_storage_token;
@@ -61,20 +61,40 @@ class Create extends Component {
     });
   }
 
-  // 将文件上传到NFTStorage(IPFS + Filecoin)
-  async uploadFileToNFTStorage(file,filename,description) {
+  // 将NFT上传到NFTStorage(IPFS + Filecoin)
+  async uploadFileToNFTStorage(image,filename,description) {
       const client   = this.state.client;
 
-      if (typeof file == 'undefined' || !file || !filename || !description) {
-        console.error('file error!');
+      if (typeof image == 'undefined' || !image || !filename || !description) {
+        console.error('image error!');
         return false;
       }
 
       return client.store({
-        file,
-        name,
-        description
+        image:image,
+        name:filename,
+        description:description
       });
+  }
+
+  //将简单文档上传到NFTStorage(IPFS + Filecoin)
+  async storeBlobToNFTStorage(txt) {
+    const client   = this.state.client;
+
+    if(!client || !txt) {
+      console.error('image error!');
+      return false;
+    }
+
+    const someData = new Blob([txt]);
+    const cid      = await client.storeBlob(someData);
+
+    if(!cid) {
+      console.error('cid error!');
+      return false;
+    }
+
+    return cid;
   }
 
   // 将文件上传到IPFS
@@ -140,13 +160,13 @@ class Create extends Component {
       break;
       case 2:
         cid       = await this.uploadFileToWeb3Storage(file);
-        image     = `https://${cid}.ipfs.dweb.link/${file.name}`
+        image     = `https://${cid}.ipfs.dweb.link/${file.name}`;
       break;
       case 3:
-        let result = await uploadFileToNFTStorage(file,file.name,file.name);
+        let result = await this.uploadFileToNFTStorage(file,file.name,file.name);
         console.log(result);
-        cid = result.ipnft;
-        image = `https://nftstorage.link/ipfs/${cid}/${file.name}`;
+        cid        = result.ipnft;
+        image      = `https://nftstorage.link/ipfs/${cid}`;
       break;
       default:
         cid       = await this.uploadFileToIPFS(file);
@@ -195,6 +215,10 @@ class Create extends Component {
         case 2:
           cid   = await this.uploadFileToWeb3Storage(file);
           uri   = `https://${cid}.ipfs.dweb.link/${file.name}`;
+        break;
+        case 3:
+          cid   = await this.storeBlobToNFTStorage(data);
+          uri   = `https://nftstorage.link/ipfs/${cid}`;
         break;
         default:
           cid   = await this.uploadFileToIPFS(file);
