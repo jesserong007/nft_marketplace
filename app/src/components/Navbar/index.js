@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React,{ Component } from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
-import market from './market.png';
+import market from '../../assets/images/market.png';
 
 class Navigation extends Component {
     

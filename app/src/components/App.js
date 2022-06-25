@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import getWeb3 from "./getWeb3";
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import Navigation from './Navbar';
-import Footer from './Footer.js';
+import Footer from './Footer'; 
 import Home from './Home.js';
 import Create from './Create.js';
 import MyListedItems from './MyListedItems.js';
@@ -12,7 +12,7 @@ import { Spinner } from 'react-bootstrap';
 import MarketplaceContract from '../contracts/Marketplace.json';
 import NFTContract from '../contracts/NFT.json';
 
-import "./App.css";
+import "../assets/styles/App.css";
 
 class App extends Component {
 
@@ -116,7 +116,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <div className="headerNavbar">
-            <Navigation />
+            <Navigation web3Handler={web3Handler} account={account} />
           </div>
           <div>
             {content}
