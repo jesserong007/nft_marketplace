@@ -1,9 +1,9 @@
 import {Link} from "react-router-dom";
 import React,{ Component } from 'react';
 import { Nav } from 'react-bootstrap';
-import home from './home.png';
-import add_image from './add_image.png';
-import person from './person.png';
+import home from '../../assets/images/home.png';
+import add_image from '../../assets/images/add_image.png';
+import person from '../../assets/images/person.png';
 
 class Footer extends Component {
     

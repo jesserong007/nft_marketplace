@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React,{ Component } from 'react';
 import { Nav } from 'react-bootstrap';
-import touxiang from './touxiang.png';
+import touxiang from '../assets/images/touxiang.png';
 
 class Person extends Component {
     
