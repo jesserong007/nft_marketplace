@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import getWeb3 from "./getWeb3";
-import {BrowserRouter,Routes,Route} from "react-router-dom";
-import Navigation from './Navbar';
+import connectWeb3 from "./connectWeb3";
+import {HashRouter,Routes,Route} from "react-router-dom";
+import Navigation from './Navbar/header.js';
 import Footer from './Footer'; 
-import Home from './Home.js';
-import Create from './Create.js';
-import MyListedItems from './MyListedItems.js';
-import MyPurchases from './MyPurchases.js';
-import Person from './Person.js';
+import Home from './pages/Home.js';
+import Create from './pages/Create.js';
+import MyListedItems from './pages/MyListedItems.js';
+import MyPurchases from './pages/MyPurchases.js';
+import Person from './pages/Person.js';
 import { Spinner } from 'react-bootstrap';
 import MarketplaceContract from '../contracts/Marketplace.json';
 import NFTContract from '../contracts/NFT.json';
@@ -19,23 +19,32 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading:true,
-      account:null,
-      nft:{},
-      marketplace:{},
-      web3:{}
+      loading:false,
+      account:"",
+      nft:null,
+      marketplace:null,
+      web3:null
     }
   }
 
   async componentDidMount() {
-    this.web3Handler();
+    const user = sessionStorage.getItem("user");
+    
+    if(user) {
+      this.setState({account:user});
+      this.web3Handler();
+    }
   }
 
   // 连接MetaMask
   async web3Handler() {
+    this.setState({
+      loading:true
+    });
+
     try {
       // 获取网络提供商和web3实例
-      const web3 = await getWeb3();
+      const web3 = await connectWeb3();
 
       // 获取用户的帐户
       //const accounts  = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -70,62 +79,64 @@ class App extends Component {
         loading:false
       })
 
+      sessionStorage.setItem("user", accounts[0]);
+
     } catch (error) {
       alert('Failed to load web3, accounts, or contract. Check console for details.');
       console.error(error);
     }
   }
 
+
   render() {
     let account     = this.state.account;
-    let web3Handler = this.web3Handler;
+    let web3Handler = this.web3Handler.bind(this);
     let marketplace = this.state.marketplace;
     let nft         = this.state.nft;
     let web3        = this.state.web3;
 
-    let content = (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-        <Spinner animation="border" style={{ display: 'flex' }} />
-        <p className='mx-3 my-0'>Awaiting Metamask Connection...</p>
-      </div>
-    );
-
-    if(!this.state.loading) {
-      content = (
-        <Routes>
-          <Route path="/" element={
-            <Home marketplace={marketplace} nft={nft} web3={web3} account={account} />
-          } />
-          <Route path="/create" element={
-            <Create marketplace={marketplace} nft={nft} web3={web3} account={account} />
-          } />
-          <Route path="/my-listed-items" element={
-            <MyListedItems marketplace={marketplace} nft={nft} web3={web3} account={account} />
-          } />
-          <Route path="/my-purchases" element={
-            <MyPurchases marketplace={marketplace} nft={nft} web3={web3} account={account} />
-          } />
-          <Route path="/person" element={
-            <Person web3Handler={web3Handler} account={account} />
-          } />
-        </Routes>
-      );
-    }
-
     return (
-      <BrowserRouter>
+      <HashRouter>
         <div className="App">
           <div className="headerNavbar">
             <Navigation web3Handler={web3Handler} account={account} />
           </div>
           <div>
-            {content}
+            {this.state.loading ? 
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+                <Spinner animation="border" style={{ display: 'flex' }} />
+                <p className='mx-3 my-0'>Loading...</p>
+              </div> :
+              <Routes>
+                <Route path="/" element={
+                  <Home marketplace={marketplace} nft={nft} web3={web3} account={account} />
+                } />
+                <Route path="/create" element={
+                  <Create marketplace={marketplace} nft={nft} web3={web3} account={account} />
+                } />
+                <Route path="/my-listed-items" element={
+                  <MyListedItems marketplace={marketplace} nft={nft} web3={web3} account={account} />
+                } />
+                <Route path="/my-purchases" element={
+                  <MyPurchases marketplace={marketplace} nft={nft} web3={web3} account={account} />
+                } />
+                <Route path="/person" element={
+                  <Person web3Handler={web3Handler} account={account} />
+                } />
+              </Routes>
+            }
           </div>
           <div>
             <Footer />
           </div>
         </div>
-      </BrowserRouter>
+        {account === "" ? 
+          <div className="loginPage">
+            <div className="bg"></div>
+            <button type='button' className="btn-connectWallet" onClick={()=>{web3Handler()}}>Connect Wallet</button>
+          </div> : ""
+        }
+      </HashRouter>
     );
   }
 }

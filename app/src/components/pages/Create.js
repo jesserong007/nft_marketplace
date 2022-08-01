@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
-import Ipfs from './Ipfs';
-import Nftstorage from './Nftstorage';
-import Web3storage from './Web3storage';
+import Ipfs from '../Ipfs';
+import Nftstorage from '../Nftstorage';
+import Web3storage from '../Web3storage';
 
 class Create extends Component {
 
@@ -9,7 +9,7 @@ class Create extends Component {
     super(props)
 
     this.state = {
-      uploadMethod:2  //1为IPFS, 2为Web3Storage, 3为NFTStorage
+      uploadMethod:3  //1为IPFS, 2为Web3Storage, 3为NFTStorage
     }
   }
 

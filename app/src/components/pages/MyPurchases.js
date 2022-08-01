@@ -47,6 +47,7 @@ class MyPurchases extends Component {
     const web3        = props.web3;
     let pushPurchases = this.pushPurchases.bind(this);
     let setLoading    = this.setLoading.bind(this);
+    let resolveLink   = this.resolveLink.bind(this);
 
     marketplace.events.Bought({
       filter:{buyer:account},
@@ -73,7 +74,7 @@ class MyPurchases extends Component {
           itemId: itemId,
           name: metadata.name,
           description: metadata.description,
-          image: metadata.image
+          image: resolveLink(metadata.image)
         }
         
         pushPurchases(purchasedItem);
@@ -81,6 +82,11 @@ class MyPurchases extends Component {
     });
 
     setLoading(false);
+  }
+
+  resolveLink(url) {
+    if(!url || !url.includes("ipfs://")) return url;
+    return url.replace("ipfs://","https://nftstorage.link/ipfs/");
   }
 
   render() {

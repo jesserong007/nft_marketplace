@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React,{ Component } from 'react';
 import { Nav } from 'react-bootstrap';
-import touxiang from '../assets/images/touxiang.png';
+import touxiang from '../../assets/images/touxiang.png';
 
 class Person extends Component {
     
@@ -24,7 +24,7 @@ class Person extends Component {
                             </Nav.Link>
                         </p>
                     ) : (
-                        <p className="txt" onClick={web3Handler}>
+                        <p className="txt" onClick={() => { web3Handler() }}>
                             Connect Wallet
                         </p>
                     )}

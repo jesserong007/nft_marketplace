@@ -63,6 +63,13 @@ module.exports = {
       gas: 5000000,
       gasPrice: 5000000000, // 5 gwei
       network_id: 3
+    },
+    matic: {
+      provider: () => new HDWalletProvider(privateKeys.split(','), `https://rpc-mumbai.maticvigil.com`),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
     }
   },
   contracts_directory: './contracts/',
