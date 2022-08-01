@@ -53,7 +53,7 @@ class Home extends Component {
           seller: item.seller,
           name: metadata.name,
           description: metadata.description,
-          image: metadata.image
+          image: this.resolveLink(metadata.image)
         })
       }
     }
@@ -74,6 +74,11 @@ class Home extends Component {
     await marketplace.methods.purchaseItem(item.itemId).send({from:account,value: web3.utils.toWei(item.totalPrice,'Ether')});
     
     this.loadMarketplaceItems(this.props);
+  }
+
+  resolveLink(url) {
+    if(!url || !url.includes("ipfs://")) return url;
+    return url.replace("ipfs://","https://nftstorage.link/ipfs/");
   }
 
   render() {

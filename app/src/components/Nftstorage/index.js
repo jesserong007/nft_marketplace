@@ -12,7 +12,7 @@ class Nftstorage extends Component {
     super(props)
 
     this.state = {
-      image:'',
+      image:null,
       price:null,
       name:'',
       description:'',
@@ -37,18 +37,19 @@ class Nftstorage extends Component {
   }
 
   // 将NFT上传到NFTStorage(IPFS + Filecoin)
-  async uploadFileToNFTStorage(image,filename,description) {
+  async uploadFileToNFTStorage(file,name,description,price) {
     const client   = this.state.client;
 
-    if (typeof image == 'undefined' || !image || !filename || !description) {
+    if (typeof file == 'undefined' || !file || !name || !description) {
       console.error('image error!');
       return false;
     }
 
     return client.store({
-      image:image,
-      name:filename,
-      description:description
+      image:file,
+      name:name,
+      description:description,
+      price:price
     });
   }
 
@@ -72,34 +73,9 @@ class Nftstorage extends Component {
     return cid;
   }
 
-  // 将文件上传到IPFS
-  async uploadToIPFS(event) {
-    event.preventDefault();
-    const file          = event.target.files[0];
-  
-    if(!file || typeof file == 'undefined') {
-      console.error('file error!');
-      return false;
-    }
-
-    const result = await this.uploadFileToNFTStorage(file,file.name,file.name);
-    console.log(result);
-    const cid    = result.ipnft;
-    const image  = `https://nftstorage.link/ipfs/${cid}`;
-     
-    if(!image) {
-      console.error('image path error!');
-      return false;
-    }
-
-    this.setState({
-      image:image
-    });
-  }
-
   // 添加NFT上传到IPFS
   async createNFT() {
-    let image           = this.state.image;
+    let image           = document.getElementById("fileImage").files[0];
     let price           = this.state.price;
     let name            = this.state.name;
     let description     = this.state.description;
@@ -107,13 +83,13 @@ class Nftstorage extends Component {
 
     if(!image || !price || !name || !description || !client) return false;
 
-    // 构造一个json
-    let  data     = JSON.stringify({image, price, name, description});
-
     try {
-      const cid   = await this.storeBlobToNFTStorage(data);
-      const uri   = `https://nftstorage.link/ipfs/${cid}`;
-     
+      const result = await this.uploadFileToNFTStorage(image,name,description,price);
+      console.log(result);
+      const cid    = result.ipnft;
+
+      const uri   = `https://nftstorage.link/ipfs/${cid}/metadata.json`;
+      console.log(uri);
       if(!uri) {
         console.error('uri error!');
         return false;
@@ -171,7 +147,6 @@ class Nftstorage extends Component {
     let setName         = this.setName.bind(this);
     let setDescription  = this.setDescription.bind(this);
     let setPrice        = this.setPrice.bind(this);
-    let uploadToIPFS    = this.uploadToIPFS.bind(this);
     let createNFT       = this.createNFT.bind(this);
 
     return (
@@ -181,7 +156,7 @@ class Nftstorage extends Component {
             type="file"
             required
             name="file"
-            onChange={uploadToIPFS}
+            id="fileImage"
           />
           <Form.Control onChange={(e) => setName(e.target.value)} size="lg" required type="text" placeholder="Name" />
           <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Description" />

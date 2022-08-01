@@ -73,7 +73,7 @@ class MyListedItems extends Component {
           itemId: i.itemId,
           name: metadata.name,
           description: metadata.description,
-          image: metadata.image
+          image: this.resolveLink(metadata.image)
         }
 
         listedItems.push(item);
@@ -88,6 +88,11 @@ class MyListedItems extends Component {
       listedItems:listedItems,
       soldItems:soldItems
     });
+  }
+
+  resolveLink(url) {
+    if(!url || !url.includes("ipfs://")) return url;
+    return url.replace("ipfs://","https://nftstorage.link/ipfs/");
   }
 
   render() {
